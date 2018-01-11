@@ -1,0 +1,28 @@
+body {
+    padding: 15px;
+    font-family: "Verdana", Verdana, serif;
+}
+
+
+
+table {
+    border-collapse: collapse;
+}
+th {
+    font-size: 10px;
+    font-weight: normal;
+    padding: 8px;
+    background-color:  #b9c9fe ;
+    border-top: 2px solid #d3ddff;
+    border-bottom: 1px solid #fff;
+    color: #039;
+}
+td {
+    padding: 40px;
+}
+a:hover {
+    text-decoration:underline;
+}
+.delete-link {
+    float: right;
+}
