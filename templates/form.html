@@ -1,1 +1,123 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page d'accueil</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}" type="text/css"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <style>
+.dropbtn {
+    font-color:blue;
+    font-size: 12px;
+    border: none;
+    cursor: pointer;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+.dropdown-content a {
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+.dropdown a:hover {background-color: #f1f1f1}
+.show {display:block;}
+</style>
+</head>
+<body>
+<div id="container" ">
+    <div class="row">
+        <div class="col-md-6 main-div mx-auto">
+            <div class="card">
+                <img class="card-img-top" src="static/img/topCard.jpg" alt="Card image cap">
+                <div class="card-block">
+                  <div class="card-header text-center">
+                    <h1>Génération de fichiers YAML</h1>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 main-div mx-auto">    
+            <div class="card">
+                <div class="card-block">
+                  <div class="card-header">
+                    <form action="{{ url_for('form_handler') }}" method="post">
+                            <input type="hidden" name="config_date_creation"  value = "{{config.date_creation}}"/>
+                            <input type="hidden" name="config_date_modification" value="{{config.date_modification}}"/>
+                            <input type="hidden" name="config_id" value="{{config.id}}"/>
+                            <input type="hidden" name="config_list_id" value="{{ config_list.id }}"/>
+                            <input type="hidden" name="config_list_name" value="{{ config_list.name }}"/>
+                    		<label style="display: inline-block; padding: 6px 10px; font-size: 14px; font-style: italic; font-family:Courier New, monospace; border-radius: 0;border: 1px solid transparent; background-color:rgb(240, 240, 240);"><span class="screen-reader-text">Création d'une nouvelle configuration</span></label><!--
+		--><input style="display: inline-block; padding: 6px 10px;font-size: 14px; font-style: italic; font-family:Courier New, monospace; border-radius: 0;border: 1px solid transparent; background-color : white;" placeholder="Enter configuration name" name="config_text" type="text" required><!--
+		--><input style="display: inline-block;	padding: 6px 10px; font-size: 14px; font-style: italic; font-family:Courier New, monospace;border-radius: 0; border: 1px solid transparent;background-color:rgb(0, 193, 51);color:#ffffff" value="Ok" type="submit">
+                    </form>
+                </div>
+                </div>
+                <div class="card-body">
+                <table class="table">
+                        <tr style="font-size: 12px;font-weight:bold;">
+                           <th>Nom</th>
+                           <th>Créé le</th>
+                           <th>Modifié le</th>
+                           <th></th>
+                           <th>Actions</th>
+                           <th></th>
+                        </tr>
+                        {% for config in config_list.configs %}
+                        <tr style="font-size: 12px;" id="menu-vertical">
+                            <td>{{config.label}}</td>
+                            <td>{{config.date_creation}}</td>
+                            <td>{{config.date_modification}}</td>
+                            <td><a href="/d/apercu_yaml/{{config.id}}" style="old; color:LimeGreen">TELECHARGER</a></td>
+                            <td class="dropdown">
+                                <a onclick="myFunction()" style="color:LimeGreen" class="dropbtn">EDITER</a>
+                                <ul  id="myDropdown" class="dropdown-content">
+                                    <a href="/reseaulistname/{{config.id}}" title="Lien 1">Les réseaux</a>
+                                    <a href="/name_computer/{{config.id}}" title="Lien 2">Les ordinateurs</a>
+                                    <a href="/d/apercu_yaml/config.id}}" title="Lien 3">Aperçu Yaml</a>
+                                </ul>
+                            </td>
+                            <td><a href="/delete/{{config.id}}" style="color:LimeGreen" >SUPPRIMER</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+</script>
+</body>
+</html> 
