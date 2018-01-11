@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aperçu de la configuration</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}" type="text/css"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
+    <script src="http://codemirror.net/lib/codemirror.js"></script>
+    <script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
+    <script src="http://codemirror.net/addon/edit/continuecomment.js"></script>
+    <script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    
+</head>
+<body>
+<div id="container">
+    <div class="row">
+        <div class="col-md-6 main-div mx-auto">
+            <div class="card">
+                <img class="card-img-top" src= "../../static/img/apercu.jpg" alt="Card image cap">
+                <div class="card-block">
+                  <div class="card-header text-center">
+                    <h3>Aperçu de la configuration</h3>
+                    <h3> "   <span style="font-family:Stencil Std, fantasy; font-weight: bold;">{{config_name}}</span>  "</h3>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 main-div mx-auto">
+            <div class="card">
+                <div class="card-header" style="background:white;">
+     
+<div>
+  <textarea rows="4" cols="50" id="codesnippet_readonly" name="codesnippet_readonly_name">
+---
+# ############################################### #
+# Static provider parameter (mutable)             #
+# ############################################### #
+
+
+provider:
+  type: static
+  networks: {% for reseau in reseau_list.reseaux %}
+  - cidr : {{reseau.part1}}.{{reseau.part2}}.{{reseau.part3}}.{{reseau.cidr1}}/{{reseau.cidr2}}
+    start : {{reseau.part1}}.{{reseau.part2}}.{{reseau.part3}}.{{reseau.start}}
+    end :{{reseau.part1}}.{{reseau.part2}}.{{reseau.part3}}.{{reseau.end}}
+    gateway : {{reseau.part1}}.{{reseau.part2}}.{{reseau.part3}}.{{reseau.gateway}}
+    dns : {{reseau.dns1}}.{{reseau.dns2}}.{{reseau.dns3}}.{{reseau.dns4}} {%endfor%}
+ 
+ eths:
+    - eth0
+    - eth1
+
+resources: {% for role in role_list.roles %} 
+    {{role.role}}:{% for computer in computer_list.computers%}{%if (computer.role==role.role)%}
+        adress: {{computer.label}}
+        user: {{computer.user}}{%endif%}{%endfor%}{%endfor%}
+
+
+# ############################################### #
+# Inventory to use (immutable)                    #
+# ############################################### #
+
+# This will describe the topology of your services
+inventory: inventories/inventory.sample
+
+# ############################################### #
+# docker registry parameters (immutable)          #
+# ############################################### #
+registry:
+  type: internal
+
+# ############################################### #
+# Enos Customizations (immutable)		          #
+# ############################################### #
+enable_monitoring: no
+
+
+# ############################################### #
+# Kolla parameters (immutable)			          #
+# ############################################### #
+# Repository
+kolla_repo: "https://git.openstack.org/openstack/kolla-ansible"
+kolla_ref: "stable/ocata"
+
+# Vars : globals.yml
+kolla:
+  kolla_base_distro: ubuntu
+  kolla_install_type: source
+  docker_namespace: beyondtheclouds
+  enable_heat: no
+  </textarea>
+</div>
+</div>
+            <div class="card-block">
+                <br>
+                <div class="form-group" style="margin:auto;">
+                        <a style="font-size:12px; display:inline-block; margin:auto;width:200px" class="btn btn-default btn-success float-right" href="{{url_for('generate_form')}}">Valider la configuration</a>
+                        <input type="button" id="download"  style="font-size:12px; display:inline-block; margin:auto;"  class="btn btn-default btn-success float-left" value="Télécharger" />    
+                </div>
+                <br>
+                <br>
+                <br>
+                <div class="form-group" style="margin:auto;mx-auto">
+                        <a style="font-size:12px; display:inline-block; margin:auto; width:200px;" class="btn btn-default float-right" href="/delete_yaml/{{config_id}}">Supprimer la configuration</a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>
+
+
+
+
+<script type='text/javascript'>
+/*eslint-env jquery */
+window.onload = function () {
+    var readOnlyCodeMirror = CodeMirror.fromTextArea(document.getElementById('codesnippet_readonly'), {
+        mode: "javascript",
+        theme: "default",
+        lineNumbers: true,
+        readOnly: true
+    });  
+};
+</script>
+<script>
+
+</script>
+<script>
+
+    $(document).ready(function () {
+
+        function saveTextAsFile() {
+            // grab the content of the form field and place it into a variable
+            var textToWrite = document.getElementById("codesnippet_readonly").value;
+            //  create a new Blob (html5 magic) that conatins the data from your form feild
+            var textFileAsBlob = new Blob([textToWrite], { type: 'text/plain' });
+            // Specify the name of the file to be saved
+            var fileNameToSaveAs = "{{config_name}}.txt";
+
+            // create a link for our script to 'click'
+            var downloadLink = document.createElement("a");
+            //  supply the name of the file (from the var above).
+            // you could create the name here but using a var
+            // allows more flexability later.
+            downloadLink.download = fileNameToSaveAs;
+            // provide text for the link. This will be hidden so you
+            // can actually use anything you want.
+            downloadLink.innerHTML = "My Hidden Link";
+
+            // allow our code to work in webkit & Gecko based browsers
+            // without the need for a if / else block.
+            window.URL = window.URL || window.webkitURL;
+
+            // Create the link Object.
+            downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+            // when link is clicked call a function to remove it from
+            // the DOM in case user wants to save a second file.
+            downloadLink.onclick = destroyClickedElement;
+            // make sure the link is hidden.
+            downloadLink.style.display = "none";
+            // add the link to the DOM
+            document.body.appendChild(downloadLink);
+
+            // click the new link
+            downloadLink.click();
+        }
+
+        function destroyClickedElement(event) {
+            // remove the link from the DOM
+            document.body.removeChild(event.target);
+        }
+    
+        $("#download").click(function (e) {
+            e.preventDefault();
+            saveTextAsFile();
+        });
+ });  
+</script>
+
+

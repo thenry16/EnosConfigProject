@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Etape 2 : les ordinateurs</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}" type="text/css"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="container">
+    <div class="row">
+        <div class="col-md-6 main-div mx-auto">
+            <div class="card">
+                <img class="card-img-top" src= "/../../../static/img/editComputer.jpg" alt="Card image cap">
+                <div class="card-block">
+                  <div class="card-header text-center">
+                    <h3>Etape 2 : Configuration des ordinateurs</h3>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 main-div mx-auto">
+            <div class="card">
+                <div class="card-header">
+                <br>
+                <h5>Ajouter un ordinateur</h5>
+                <br>
+                    <form class="form-horizontal" style="font-size: 12px;" action="{{ url_for('form_handler_computer') }}" method="post">
+                        <div class="form-group">       
+                            <label style="display:inline-block" class="control-label col-sm-2" >adresse:</label> 
+                            <input required style="display: inline-block; padding: 6px 10px;border-radius: 0;border: 1px solid lightgrey; width: 460px;" type="text" placeholder="Enter address" name="computer_text">
+                        </div>
+                        <div class="form-group" style="font-size:12px">   
+                            <label style="display:inline-block;" class="control-label col-sm-2" >utilisateur:</label> 
+                            <input required style="display: inline-block; padding: 6px 10px;border-radius: 0;border: 1px solid lightgrey; width: 460px;" type="text" placeholder="Enter user" name="computer_user">
+                        </div>
+                        <div class="form-group">          
+                                <table class="table">
+                                    <tr>
+                                        <th><label style="font-weight: normal;">role:</label></th>
+                                        <th><label class="radio"><input type="radio" name="computer_role" value="control" id="control" checked> Control</label></th>
+                                        <th><label class="radio"><input type="radio" name="computer_role" value="network" id="network"> Network</label></th>
+                                        <th><label class="radio"><input type="radio" name="computer_role" value="compute" id="compute"> Compute</label></th>
+                                    </tr>
+                                </table>
+                        </div>
+                        <input type="hidden" name="computer_list_id" value="{{ computer_list.id }}"/>
+                        <input type="hidden" name="computer_list_name" value="{{ computer_list.name }}"/> 
+                        <input type="hidden" name="computer_list_config_id" value="{{ computer_list.config_id }}"/> 
+                        <input type="hidden" name="role_list_id" value="{{ role_list.id }}"/>
+                        <input type="hidden" name="role_list_name" value="{{role_list.name }}"/> 
+                        <input type="hidden" name="role_list_config_id" value="{{ role_list.config_id }}"/> 
+                        
+                    <div class="form-group"> 
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button style="font-size:10px; font-weight:bold;" type="submit" class="btn btn-default btn-success">+</button>
+                        </div>
+                    </div>
+                </form>
+                </div>
+           </div>
+               <div class="card-block">
+                  <div class="card-header">
+                  <br>
+                  <h5>Mes ordinateurs</h5>
+                  <br>
+                <table class="table">
+                        <tr style="font-size: 12px;">
+                           <th>adresse</th>
+                           <th>utilisateur</th>
+                           <th>role</th>
+                        </tr>
+                        {% for computer in computer_list.computers %}
+                        <tr style="font-size: 12px;" >
+                            <td>{{computer.label}}</td>
+                            <td>{{computer.user}}</td>
+                            <td>{{computer.role}}</td>
+                            <td><a style="font-size:13px;font-weight:bold;" href="/delete_computer/{{computer_list.id}}/{{computer.id}}/{{role_list.id}}">x</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <div class="card-block">
+                <br>
+                <div class="form-group">
+                        <a style="font-size:12px; display:block; margin:auto;" class="btn btn-default btn-success" href="/d/apercu_yaml/{{computer_list.config_id}}">Aperçu Yaml</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
