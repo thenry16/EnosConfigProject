@@ -1,4 +1,0 @@
-Flask==0.10
-Flask-SQLAlchemy==2.1
-pysqlite
-gunicorn==19.6.0
