@@ -131,9 +131,12 @@ window.onload = function () {
 };
 </script>
 <script>
+
 </script>
 <script>
+
     $(document).ready(function () {
+
         function saveTextAsFile() {
             // grab the content of the form field and place it into a variable
             var textToWrite = document.getElementById("codesnippet_readonly").value;
@@ -141,6 +144,7 @@ window.onload = function () {
             var textFileAsBlob = new Blob([textToWrite], { type: 'text/plain' });
             // Specify the name of the file to be saved
             var fileNameToSaveAs = "{{config_name}}.txt";
+
             // create a link for our script to 'click'
             var downloadLink = document.createElement("a");
             //  supply the name of the file (from the var above).
@@ -150,9 +154,11 @@ window.onload = function () {
             // provide text for the link. This will be hidden so you
             // can actually use anything you want.
             downloadLink.innerHTML = "My Hidden Link";
+
             // allow our code to work in webkit & Gecko based browsers
             // without the need for a if / else block.
             window.URL = window.URL || window.webkitURL;
+
             // Create the link Object.
             downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
             // when link is clicked call a function to remove it from
@@ -162,9 +168,11 @@ window.onload = function () {
             downloadLink.style.display = "none";
             // add the link to the DOM
             document.body.appendChild(downloadLink);
+
             // click the new link
             downloadLink.click();
         }
+
         function destroyClickedElement(event) {
             // remove the link from the DOM
             document.body.removeChild(event.target);
@@ -176,3 +184,5 @@ window.onload = function () {
         });
  });  
 </script>
+
+
