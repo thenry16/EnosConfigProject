@@ -281,6 +281,7 @@ def delete_yaml(config_id):
     return redirect(url_for('generate_form',config_list_name='default'))
 
 if __name__ == "__main__":
+    app.debug = True
 #    # Create the DB
     from databaseProjet import db
     from databaseProjet import Config
@@ -294,6 +295,8 @@ if __name__ == "__main__":
     print("creating database")
     db.create_all()
     print("database created") 
-    app.run(host="0.0.0.0", port=8080, debug=True)
-    
+
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host='0.0.0.0', port=port)
+    //app.run(host="0.0.0.0", port=8080, debug=True)
 
