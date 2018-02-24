@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask import request, url_for, redirect, session, render_template
 app = Flask("firstFormApplication")
@@ -295,8 +296,8 @@ if __name__ == "__main__":
     db.create_all()
     print("database created") 
     app.debug = True
-    app.run(host="0.0.0.0", port=5000, debug=True)
-    #port = int(os.environ.get("PORT", 5000))
-    #app.run(host='0.0.0.0', port=port)
+    #app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
 
